@@ -1,0 +1,7 @@
+body { font-family: Arial; display: flex; justify-content: center; align-items: center; height: 100vh; background: #f4f4f4; }
+.login-container { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 350px; }
+.input-group { margin-bottom: 1rem; }
+label { display: block; margin-bottom: 5px; }
+input { width: 100%; padding: 8px; box-sizing: border-box; }
+button { width: 100%; padding: 10px; background: #6F4E37; color: white; border: none; cursor: pointer; border-radius: 4px; }
+#message { color: red; font-size: 14px; margin-top: 10px; }
