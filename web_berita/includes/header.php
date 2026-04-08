@@ -33,6 +33,12 @@ if (session_status() === PHP_SESSION_NONE) {
             width: 100%;
             object-fit: cover; 
         }
+        .navbar {
+            z-index: 1050 !important; /* Memaksa Navbar berada di lapisan paling depan */
+        }
+        .dropdown-menu {
+            z-index: 1060 !important;
+        }
 
         .carousel-caption {
             text-align: left;
@@ -54,7 +60,7 @@ if (session_status() === PHP_SESSION_NONE) {
         }
     </style>
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow">
   <div class="container">
@@ -124,5 +130,3 @@ if (session_status() === PHP_SESSION_NONE) {
     </div>
   </div>
 </nav>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

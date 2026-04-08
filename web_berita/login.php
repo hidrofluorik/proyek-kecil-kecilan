@@ -18,14 +18,21 @@
 
                         if(mysqli_num_rows($result) === 1){
                             $row = mysqli_fetch_assoc($result);
-                            
-                            // Verifikasi password yang di-hash
                             if(password_verify($pass, $row['password'])){
-                                // Set Session data user
-                                $_SESSION['id_user']  = $row['id'];
-                                $_SESSION['username'] = $row['username'];
-                                $_SESSION['role']     = $row['role'];
-                                $_SESSION['points']   = $row['reputation_points'];
+    // Pastikan session start sudah terpanggil (biasanya sudah di header, tapi buat jaga-jaga)
+    if (session_status() === PHP_SESSION_NONE) { session_start(); }
+
+    // COCOKKAN INI DENGAN NAMA KOLOM DI DATABASE KAMU
+    // Kalau di phpMyAdmin kolomnya namanya 'id', pakai $row['id']
+    $_SESSION['id_users'] = $row['id']; 
+    
+    $_SESSION['username'] = $row['username'];
+    $_SESSION['role']     = $row['role'];
+    $_SESSION['points']   = $row['reputation_points'] ?? 0;
+
+    echo "<script>alert('Selamat Datang, ".$row['username']."!'); window.location='index.php';</script>";
+    exit;
+
 
                                 // Redirect (Pindahkan halaman)
                                 echo "<script>alert('Selamat Datang, ".$row['username']."!'); window.location='index.php';</script>";

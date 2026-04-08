@@ -32,9 +32,12 @@ include 'includes/header.php';
                                 
                                 if(mysqli_query($koneksi, $query_user)){
                                     $id_user_baru = mysqli_insert_id($koneksi);
+                                    
+                                    // Insert array minat ke tabel user_interests
                                     if(!empty($minat)){
                                         foreach($minat as $tag){
                                             $tag_safe = mysqli_real_escape_string($koneksi, $tag);
+                                            // FIX: kolom id menjadi id_users
                                             mysqli_query($koneksi, "INSERT INTO user_interests (id_users, tag_name) VALUES ('$id_user_baru', '$tag_safe')");
                                         }
                                     }
@@ -43,6 +46,8 @@ include 'includes/header.php';
                                             alert('Pendaftaran Berhasil! Silakan Login.');
                                             window.location.href='login.php';
                                           </script>";
+                                } else {
+                                    echo "<div class='alert alert-danger'>Terjadi kesalahan sistem saat mendaftar.</div>";
                                 }
                             }
                         }
@@ -68,19 +73,30 @@ include 'includes/header.php';
                         </div>
                         
                         <div class="mb-4">
-                            <label class="form-label fw-bold small text-primary d-block mb-3">MINAT BERITA ANDA</label>
-                            <div class="d-flex flex-wrap gap-2">
-                                <?php 
-                                $kategori = ['Teknologi', 'Sains', 'Politik', 'Otomotif', 'Gaming', 'Kesehatan', 'Olahraga', 'Nasional'];
-                                foreach($kategori as $kat): ?>
-                                    <input type="checkbox" class="btn-check" name="minat[]" value="<?php echo $kat; ?>" id="kat_<?php echo $kat; ?>" autocomplete="off">
-                                    <label class="btn btn-outline-secondary btn-sm rounded-pill px-3" for="kat_<?php echo $kat; ?>">
-                                        + <?php echo $kat; ?>
-                                    </label>
-                                <?php endforeach; ?>
-                            </div>
-                        </div>
-
+    <label class="form-label fw-bold small text-primary d-block mb-3">MINAT BERITA ANDA</label>
+    <div class="d-flex flex-wrap gap-2">
+        <?php 
+        // Tarik semua tag yang ada di database, urutkan sesuai abjad
+        $query_tags = mysqli_query($koneksi, "SELECT name FROM tags ORDER BY name ASC");
+        
+        if($query_tags && mysqli_num_rows($query_tags) > 0):
+            while($t = mysqli_fetch_assoc($query_tags)): 
+                $kat = htmlspecialchars($t['name']);
+                // Bikin ID unik pakai md5 biar aman walaupun nama tag ada spasi
+                $id_kat = md5($kat); 
+        ?>
+            <input type="checkbox" class="btn-check" name="minat[]" value="<?php echo $kat; ?>" id="kat_<?php echo $id_kat; ?>" autocomplete="off">
+            <label class="btn btn-outline-secondary btn-sm rounded-pill px-3" for="kat_<?php echo $id_kat; ?>">
+                + <?php echo $kat; ?>
+            </label>
+        <?php 
+            endwhile; 
+        else:
+            echo '<span class="text-muted small">Belum ada tag tersedia. Buat berita pertama untuk menambahkan tag.</span>';
+        endif;
+        ?>
+    </div>
+</div>
                         <button type="submit" name="register" class="btn btn-warning w-100 fw-bold py-3 shadow border-0">DAFTAR SEKARANG</button>
                     </form>
                     
